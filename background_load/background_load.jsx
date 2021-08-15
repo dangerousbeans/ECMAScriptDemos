@@ -1,3 +1,11 @@
+export class Test extends godot.Spatial {
+    // FIXME: this function I expect to be runnable from the thread, but I cannot figure out how to run it
+    // from the rebound instance
+    test(){
+        console.log("Yessssssss!")
+    }
+}
+
 export default class BackgroundLoad extends godot.Control {
     constructor() {
         super();
@@ -17,6 +25,9 @@ export default class BackgroundLoad extends godot.Control {
     _enter_tree() {
         this.worker = new Worker("res://worker.js");
         this.worker.onmessage = this._onmessage.bind(this);
+
+        let test_instance = new Test()
+        this.worker.postMessage({ function: "test", arguments: [godot.abandon_value(test_instance)] });
     }
     _exit_tree() {
         this.worker.terminate();

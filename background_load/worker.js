@@ -17,10 +17,23 @@ function load_resource(path) {
         globalThis.postMessage({ type: "error", error: err, path });
     }
 }
+
+function test(object_id) {
+    console.log("test", object_id)
+    let testInstance = godot.adopt_value(object_id)
+
+    console.log("test instance", testInstance)
+
+    testInstance.test() // fails
+}
+
 const FUNCTIONS = {
     load_resource,
+    test
 };
 globalThis.onmessage = function (event) {
+    console.log(JSON.stringify(event))
+
     if (event.function in FUNCTIONS) {
         const func = FUNCTIONS[event.function];
         func.apply(this, event.arguments);
